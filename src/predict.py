@@ -63,5 +63,5 @@ for type_encoded in range(len(type_encoder.classes_)):
 # Decode the best predicted label
 best_predicted_event_type_decoded = type_encoder.inverse_transform(best_prediction)[0]
 
-# Display the prediction
-print(f"The predicted event type for March 7, 2024, at 17:00 is: {predicted_event_type_decoded}")
+# Display the best prediction
+print(f"The predicted event type for March 7, 2024, at 17:00 is: {best_predicted_event_type_decoded} with a probability of {best_probability}")
