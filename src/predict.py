@@ -1,11 +1,19 @@
 import joblib
 import pandas as pd
 import datetime
+import numpy as np
 
 # Load the trained model
 model = joblib.load('trained_model.joblib')
 type_encoder = joblib.load('type_encoder.joblib')
 dayOfWeek_encoder = joblib.load('dayOfWeek_encoder.joblib')
+
+# Load the historical data
+historical_data = pd.read_csv('events_data.csv')
+
+# Calculate the average time between events for each type
+average_time_between_events = historical_data.groupby('type')['timeBetweenEvents'].mean()
+print(average_time_between_events)
 
 event_data = {
     "startDatetime": datetime.datetime(2024, 3, 7, 17, 0),  # Replace with the actual start time
