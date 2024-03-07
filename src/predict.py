@@ -34,25 +34,34 @@ event_df['dayOfMonth'] = event_df['startDatetime'].dt.day
 # Encode categorical features
 event_df['dayOfWeekEncoded'] = dayOfWeek_encoder.transform(event_df['dayOfWeek'])
 
-event_df['typeEncoded'] = 0  # Replace 0 with a placeholder value if needed
+# Initialize a variable to store the best prediction and its probability
+best_prediction = None
+best_probability = -np.inf
 
-# event_df['timeBetweenEvents'] = time_between_events
+# Iterate over each event type
+for type_encoded in range(len(type_encoder.classes_)):
+    # Set the typeEncoded and timeBetweenEvents for the current event type
+    event_df['typeEncoded'] = type_encoded
+    event_df['timeBetweenEvents'] = average_time_between_events[type_encoded]
 
+    # Select relevant features for prediction
+    prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents']
 
+    event_features = event_df[prediction_features]
 
-# Select relevant features for prediction
-# prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents']
-prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded']
+    # Make predictions
+    predicted_event_type = model.predict(event_features)
+    predicted_probability = model.predict_proba(event_features).max()
 
-print(event_df[prediction_features])
+    print(type_encoder.inverse_transform(predicted_event_type), predicted_probability)
 
-event_features = event_df[prediction_features]
+    # If this prediction has a higher probability than the current best, update the best prediction
+    if predicted_probability > best_probability:
+        best_prediction = predicted_event_type
+        best_probability = predicted_probability
 
-# Make predictions
-predicted_event_type = model.predict(event_features)
-
-# Decode the predicted label if necessary
-predicted_event_type_decoded = type_encoder.inverse_transform(predicted_event_type)[0]
+# Decode the best predicted label
+best_predicted_event_type_decoded = type_encoder.inverse_transform(best_prediction)[0]
 
 # Display the prediction
 print(f"The predicted event type for March 7, 2024, at 17:00 is: {predicted_event_type_decoded}")
