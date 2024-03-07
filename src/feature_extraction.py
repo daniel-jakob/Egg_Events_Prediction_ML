@@ -17,6 +17,7 @@ for event in raw_data:
     event['dayOfWeek'] = event['startDatetime'].strftime('%A')  # Full day name (Monday, Tuesday, etc.)
     event['dayOfMonth'] = event['startDatetime'].day
     event['type'] = event['type'].lower()
+    event['weekOfYear'] = event['startDatetime'].isocalendar().week
 
 
 # Sort the data by type and startDatetime

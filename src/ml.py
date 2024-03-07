@@ -19,7 +19,7 @@ df['dayOfWeekEncoded'] = dayOfWeek_encoder.fit_transform(df['dayOfWeek'])
 
 
 # Select relevant features for the model
-features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents']
+features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear']
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(df[features], df['typeEncoded'], test_size=0.2, random_state=42)

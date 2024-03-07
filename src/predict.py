@@ -30,6 +30,7 @@ event_df = pd.DataFrame([event_data])
 # Extract day of the week, day within the month, and hour of the day
 event_df['dayOfWeek'] = event_df['startDatetime'].dt.day_name()
 event_df['dayOfMonth'] = event_df['startDatetime'].dt.day
+event_df['weekOfYear'] = event_df['startDatetime'].dt.isocalendar().week
 
 # Encode categorical features
 event_df['dayOfWeekEncoded'] = dayOfWeek_encoder.transform(event_df['dayOfWeek'])
@@ -45,7 +46,7 @@ for type_encoded in range(len(type_encoder.classes_)):
     event_df['timeBetweenEvents'] = average_time_between_events[type_encoded]
 
     # Select relevant features for prediction
-    prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents']
+    prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear']
 
     event_features = event_df[prediction_features]
 
