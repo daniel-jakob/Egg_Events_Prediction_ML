@@ -39,11 +39,16 @@ event_df['dayOfWeekEncoded'] = dayOfWeek_encoder.transform(event_df['dayOfWeek']
 best_prediction = None
 best_probability = -np.inf
 
+# Get the most recent occurrence of each event type
+most_recent_events = historical_data.groupby('type')['startDatetime'].max()
+
 # Iterate over each event type
 for type_encoded in range(len(type_encoder.classes_)):
     # Set the typeEncoded and timeBetweenEvents for the current event type
     event_df['typeEncoded'] = type_encoded
-    event_df['timeBetweenEvents'] = average_time_between_events[type_encoded]
+
+    # Find the time difference between the current event iterated and the most recent event of the current type
+    event_df['timeBetweenEvents'] = (event_df['startDatetime'].iloc[0] - pd.to_datetime(most_recent_events[type_encoded])).total_seconds()
 
     # Select relevant features for prediction
     prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear']
