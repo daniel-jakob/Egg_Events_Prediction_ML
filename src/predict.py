@@ -81,4 +81,4 @@ for type_encoded in range(len(type_encoder.classes_)):
 best_predicted_event_type_decoded = type_encoder.inverse_transform(best_prediction)[0]
 
 # Display the best prediction
-print(f"The predicted event type for March 7, 2024, at 17:00 is: {best_predicted_event_type_decoded} with a probability of {best_probability}")
+print(f"The predicted event type for {event_df['startDatetime'].iloc[0]} is: {best_predicted_event_type_decoded} with a probability of {best_probability}")
