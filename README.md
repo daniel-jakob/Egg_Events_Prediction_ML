@@ -33,10 +33,12 @@ This project is a machine learning model that predicts the type of events in the
 
 The model uses the following features for prediction:
 
--   `dayOfMonth`: The day of the month when the event starts.
--   `dayOfWeekEncoded`: The day of the week when the event starts, encoded as an integer.
--   `typeEncoded`: The type of the event, encoded as an integer.
--   `timeBetweenEvents`: The time between this event and the previous event of the same type, in seconds.
+-   `dayOfMonth`: Day of the month when the event starts.
+-   `dayOfWeekEncoded`: Day of the week when the event starts, encoded as an integer.
+-   `typeEncoded`: Type of the event, encoded as an integer.
+-   `timeBetweenEvents`: Time between this event and the previous event of the same type, in seconds.
+-   `weekOfYear`: Week of the year of the event start (attempting to capture holidays)
+-   `eventFrequency`: How often different event types occur
 
 ## Model
 
