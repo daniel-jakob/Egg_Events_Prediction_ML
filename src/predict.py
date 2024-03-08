@@ -14,6 +14,13 @@ historical_data = pd.read_csv('events_data.csv')
 # Calculate the average time between events for each type
 average_time_between_events = historical_data.groupby('type')['timeBetweenEvents'].transform(lambda x: x.ewm(span=20).mean())
 
+# Calculate the frequency of each event type
+event_counts = historical_data['type'].value_counts()
+total_events = historical_data['type'].count()
+event_frequencies = event_counts / total_events
+
+print(event_frequencies)
+
 event_data = {
     "startDatetime": datetime.datetime(2024, 3, 7, 17, 0),  # Replace with the actual start time
     # Add other relevant information for the event
@@ -46,11 +53,15 @@ for type_encoded in range(len(type_encoder.classes_)):
     # Set the typeEncoded and timeBetweenEvents for the current event type
     event_df['typeEncoded'] = type_encoded
 
+    # Map the event frequency to the current event type
+    event_df['eventFrequency'] = event_df['typeEncoded'].map(event_frequencies)
+
     # Find the time difference between the current event iterated and the most recent event of the current type
     event_df['timeBetweenEvents'] = (event_df['startDatetime'].iloc[0] - pd.to_datetime(most_recent_events[type_encoded])).total_seconds()
+    print(event_df['timeBetweenEvents'], type_encoder.inverse_transform(event_df['typeEncoded']))
 
     # Select relevant features for prediction
-    prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear']
+    prediction_features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear', 'eventFrequency']
 
     event_features = event_df[prediction_features]
 
@@ -59,6 +70,7 @@ for type_encoded in range(len(type_encoder.classes_)):
     predicted_probability = model.predict_proba(event_features).max()
 
     print(type_encoder.inverse_transform(predicted_event_type), predicted_probability)
+    print("most recent occurence:", most_recent_events[type_encoded] ,"average diff:" , average_time_between_events[type_encoded],"\n")
 
     # If this prediction has a higher probability than the current best, update the best prediction
     if predicted_probability > best_probability:

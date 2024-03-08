@@ -17,9 +17,18 @@ df['typeEncoded'] = type_encoder.fit_transform(df['type'])
 dayOfWeek_encoder = LabelEncoder()
 df['dayOfWeekEncoded'] = dayOfWeek_encoder.fit_transform(df['dayOfWeek'])
 
+# Calculate the frequency of each event type
+event_counts = df['type'].value_counts()
+total_events = df['type'].count()
+
+event_frequencies = event_counts / total_events
+df['eventFrequency'] = df['type'].map(event_frequencies)
+
+print(df)
+
 
 # Select relevant features for the model
-features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear']
+features = ['dayOfMonth', 'dayOfWeekEncoded', 'typeEncoded', 'timeBetweenEvents', 'weekOfYear', 'eventFrequency']
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(df[features], df['typeEncoded'], test_size=0.2, random_state=42)
