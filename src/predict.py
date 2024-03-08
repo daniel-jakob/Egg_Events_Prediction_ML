@@ -12,8 +12,7 @@ dayOfWeek_encoder = joblib.load('dayOfWeek_encoder.joblib')
 historical_data = pd.read_csv('events_data.csv')
 
 # Calculate the average time between events for each type
-average_time_between_events = historical_data.groupby('type')['timeBetweenEvents'].mean()
-print(average_time_between_events)
+average_time_between_events = historical_data.groupby('type')['timeBetweenEvents'].transform(lambda x: x.ewm(span=20).mean())
 
 event_data = {
     "startDatetime": datetime.datetime(2024, 3, 7, 17, 0),  # Replace with the actual start time
