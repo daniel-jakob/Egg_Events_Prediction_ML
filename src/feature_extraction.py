@@ -23,6 +23,8 @@ for event in raw_data:
 # Sort the data by type and startDatetime
 df = pd.DataFrame(raw_data).sort_values(by=['type', 'startDatetime'])
 
+df = df[df['ultra'] != True]
+
 # Calculate the time between events of the same type
 df['timeBetweenEvents'] = df.groupby('type')['startDatetime'].diff().dt.total_seconds()
 
