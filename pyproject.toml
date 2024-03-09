@@ -1,0 +1,27 @@
+[project]
+name = "Egg_events_prediction_ML"
+authors = [
+    {name = "Daniel Jakob", email = "daniel@jakob.ie"},
+]
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+keywords = ["Random Forest Classifier", "Machine Learning", "Events Prediction"]
+description = "This project is a machine learning model that predicts the next event type in the game Egg, Inc. based on historical event data"
+
+dependencies = [
+    "numpy",
+	"pandas",
+	"scikit-learn",
+	"requests",
+	"joblib",
+]
+
+[project.optional-dependencies]
+vis = [
+	"matplotlib",
+	"seaborn",
+]
+
+[project.urls]
+Repository = "https://github.com/daniel-jakob/Egg_Events_Prediction_ML"
