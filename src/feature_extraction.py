@@ -12,6 +12,7 @@ with open(file_path, 'r') as file:
 
 # Convert timestamps to datetime objects and extract day of the week
 for event in raw_data:
+    event['endTimestamp'] = round(event['endTimestamp']) # Round to the nearest second
     event['startDatetime'] = datetime.datetime.fromtimestamp(event['startTimestamp'])
     event['endDatetime'] = datetime.datetime.fromtimestamp(event['endTimestamp'])
     event['dayOfWeek'] = event['startDatetime'].strftime('%A')  # Full day name (Monday, Tuesday, etc.)
