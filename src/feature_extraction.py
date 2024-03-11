@@ -12,6 +12,7 @@ with open(file_path, 'r') as file:
 
 # Convert timestamps to datetime objects and extract day of the week
 for event in raw_data:
+    event['startTimestamp'] = round(event['startTimestamp']) # Round to the nearest second
     event['endTimestamp'] = round(event['endTimestamp']) # Round to the nearest second
     event['startDatetime'] = datetime.datetime.fromtimestamp(event['startTimestamp'])
     event['endDatetime'] = datetime.datetime.fromtimestamp(event['endTimestamp'])
@@ -22,12 +23,11 @@ for event in raw_data:
 
 
 # Sort the data by type and startDatetime
-df = pd.DataFrame(raw_data).sort_values(by=['type', 'startDatetime'])
+df = pd.DataFrame(raw_data).sort_values(by=['type', 'startTimestamp'])
 
 df = df[df['ultra'] != True]
 
-# Calculate the time between events of the same type
-df['timeBetweenEvents'] = df.groupby('type')['startDatetime'].diff().dt.total_seconds()
+# Sort by startDatetime and reset the index
 
 
 # Save the DataFrame to a CSV file
