@@ -27,7 +27,17 @@ df = pd.DataFrame(raw_data).sort_values(by=['type', 'startTimestamp'])
 
 df = df[df['ultra'] != True]
 
+# Calculate the time between events of the same type (in days)
+df['timeBetweenEvents'] = df.groupby('type')['startDatetime'].diff().dt.total_seconds() / 86400
+
+
 # Sort by startDatetime and reset the index
+df = df.sort_values(by='startTimestamp').reset_index(drop=True)
+
+
+# Calculate the preceding event type when sorted by startDatetime
+df['precedingEventType'] = df['type'].shift(1)
+
 
 
 # Save the DataFrame to a CSV file
